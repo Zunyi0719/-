@@ -1,0 +1,29 @@
+问题：
+1. 强类型 弱类型
+2. web API
+3. HTTP 接收报文 1xx, 2xx, 3xx, 4xx, 5xx 含义
+4. RESTFUL API
+
+解答：
+1. 
+Js 弱类型，比如var可以用于int也可用于string用于char
+Java 强类型，每个变量都必须要有明确的类型，且该变量一旦指定了该数据类型，未经强制转换前就永远是该类型了 
+
+2. 
+Web API 是基于HTTP 的编程接口框架，可以参加HTTP发送报文（GET/POST/PUT/DELETE，唯一标识 URL），HTTP 接收报文（各种status code）
+其中RESTFUL API 即属于WEB API
+
+3. 1xx - information
+   2xx - success
+   3xx - 重定向
+   4xx - 客户端error
+   5xx - 服务端error
+
+4. 
+RESTFUL API 是 REST API的一种实现，REST API 是一套前后端分离的标准
+RESTFUL 6 大原则 ：1. C/S架构 
+                  2. 无状态，http请求本身是无状态的，客户端每次请求都得带上自己的状态信息以便服务端识别
+                  3. 统一接口，即资源识别（通过URL标识请求的资源 e.g. ..../country/city/name），请求的动作（http method），响应信息（状态码）
+                  4. 一致的数据格式（XML 或 JSON）
+                  5. 客户端可缓存
+                  6. 按需编码（别管了罗里吧嗦），大致意思是服务端可以返回一些JS代码让客户端执行
