@@ -5,6 +5,7 @@
 4. RESTFUL API
 5. cookie,session，token，如果session存在cookie里，cookie禁用怎么办
 6. 表单是如何提交的
+7. 精度丢失问题
 
 解答：
 1. 
@@ -50,3 +51,7 @@ sessionidA没有存在服务器B，会导致sessionid丢失了。
 6.
 对于get请求，浏览器会将form表单转换成value1=name1&value2=name2&value3=name3的形式附到URL后缀上发送给服务端
 对于post请求，浏览器把form数据封装到http请求的entity body中发给服务端
+
+7.
+所有的小数都是由二进制表示的，这导致了部分小数无法精确由二进制表示, 只能是一个近似的数，如不用近似的数 0.75 可表示 为1/2+1/4， 即 Sum(c* 2^n ), c 为任意整数，n也为任意整数。
+而如数字 0.3 是无法用二进制精确表示的, e.g. double a = 0.1, double b = 0.2, a+b == 0.3 会返回false，因为0.1+0.2 会得到 0.300...4而不是0.3
