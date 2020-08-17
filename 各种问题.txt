@@ -34,15 +34,19 @@ RESTFUL 6 大原则 ：1. C/S架构
 5.1 cookie - 一段小型文本数据，由服务端在客户端首次请求时发送给客户端，cookie可以被存在进程里（则浏览器关闭后cookie消失），或硬盘里（浏览器关闭后即使重启浏览器cookie依旧存在，在
 过期时间到期后消失），http请求头里会有cookie，把客户端保存的所有cookie发给服务端，同时http的响应头里有set-cookie，为客户端首次请求时服务端发送的set-cookie的内容。
 cookie可以保存sessionid，也可以保存用户喜好，用户账号密码等（比如勾选记住我）
-如果禁用了cookie，seesion发不到服务端怎么办？ -- 1. URL重写，把sessionid附在url后缀上 2. 表单隐藏字段，服务器自动修改表单，增加一个隐藏字段用于发送sessionid 
+如果禁用了cookie，seesionid发不到服务端怎么办？ -- 1. URL重写，把sessionid附在url后缀上 2. 表单隐藏字段，服务器自动修改表单，增加一个隐藏字段用于发送sessionid 
 
 
 5.2 session - 会话id，验证身份的时候用到的，每个客户端与服务端会话都有一个单独session，用于标识是某个用户，客户端保存sessionid在cookie中，服务端可以把sessionid存在内存里，也可以
-持久化保存session到file，数据库，memcache，Redis等
+持久化保存session到file，数据库，memcache，Redis等。客户端把session存在cookie。
+session的问题 -- 对于多服务器，生成的sessionid肯定是不一样的，假设客户端第一次请求转发到服务器A，服务器A对其生成了sessionidA，第二次请求被转发到服务器B，因为
+sessionidA没有存在服务器B，会导致sessionid丢失了。
+解决办法：1. 服务器之间需要不停地通信更新sessionid（即高效同步） 2. 用一台专门的memcache服务器存储所有的sessionid，所有服务器都到该memchache上校验sessionid，可能的问题是单点故障（memchache宕机
+则所有sessionid丢失）
 
-5.3 token - session的优化，就是在第一次会话的时候，服务端就生成一个token，这个token可以由用户id（即数据），以及用服务端自己的私钥加密对数据加密后的签名拼接组成，以后每次用户发请求给服务端
-服务端只需要验证token（即签名数据来和token中的签名作比较，如果一样就通过验证）
+5.3 token - session的优化，就是在第一次会话的时候，服务端就生成一个token，这个token可以由用户id（即数据），以及用服务端的私钥对数据加密后的签名拼接组成，以后每次用户发请求给服务端
+服务端只需要验证token（即签名数据来和token中的签名作比较，如果一样就通过验证），相当于用CPU运算换存储（session是以存储的方式存在的）
 
 6.
-对于get请求，浏览器会讲form表单转换成value1=name1&value2=name2&value3=name3的形式附到URL后缀上发送给服务端
+对于get请求，浏览器会将form表单转换成value1=name1&value2=name2&value3=name3的形式附到URL后缀上发送给服务端
 对于post请求，浏览器把form数据封装到http请求的entity body中发给服务端
